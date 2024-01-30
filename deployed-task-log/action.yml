@@ -16,4 +16,4 @@ outputs:
 
 runs:
   using: node20
-  main: dist/deployed-task-log/index.js
+  main: dist/index.js
