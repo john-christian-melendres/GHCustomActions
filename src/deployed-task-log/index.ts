@@ -22,14 +22,14 @@ export async function run(): Promise<void> {
       }
     };
 
-    await exec.exec('git', ['log', '--pretty=format:', '{%n  \"commit\": \"%H\",%n  \"author\": \"%an\",%n  \"date\": \"%ad\",%n  \"message\": \"%f\"%n},' ,`${startCommitHash}^1..${endCommitHash}`],  options);
+    await exec.exec('git', ['log', '--pretty=format:', `'{%n  \"commit\": \"%H\",%n  \"author\": \"%an\",%n  \"date\": \"%ad\",%n  \"message\": \"%f\"%n},'` ,`${startCommitHash}^1..${endCommitHash}`],  options);
     console.log(myOutput);
     console.log(myError);
 
     const test = `[${myOutput}]`
     console.log(test)
 
-    core.setOutput('js-value', "Result")
+    core.setOutput('js-value', myOutput)
     // // get log rawTex"
     // const logTxts = execSync(
     //   `git log --pretty=format:"{%n  #'#commit#'#: #'#%H#'#,%n  #'#abbreviated_commit#'#: #'#%h#'#,%n  #'#tree#'#: #'#%T#'#,%n  #'#abbreviated_tree#'#: #'#%t#'#,%n  #'#parent#'#: #'#%P#'#,%n  #'#abbreviated_parent#'#: #'#%p#'#,%n  #'#refs#'#: #'#%D#'#,%n  #'#encoding#'#: #'#%e#'#,%n  #'#subject#'#: #'#%s#'#,%n  #'#sanitized_subject_line#'#: #'#%f#'#,%n  #'#body#'#: #'#%b#'#,%n  #'#commit_notes#'#: #'#%N#'#,%n  #'#verification_flag#'#: #'#%G?#'#,%n  #'#signer#'#: #'#%GS#'#,%n  #'#signer_key#'#: #'#%GK#'#,%n  #'#author#'#: {%n    #'#name#'#: #'#%aN#'#,%n    #'#email#'#: #'#%aE#'#,%n    #'#date#'#: #'#%aD#'#%n  },%n  #'#commiter#'#: {%n    #'#name#'#: #'#%cN#'#,%n    #'#email#'#: #'#%cE#'#,%n    #'#date#'#: #'#%cD#'#%n  }%n}," ${startCommitHash}..${endCommitHash}`,
