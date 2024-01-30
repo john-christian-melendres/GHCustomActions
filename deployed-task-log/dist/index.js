@@ -25977,9 +25977,9 @@ async function run() {
         const options = {
             listeners: {
                 stdout: (data) => {
-                    console.log(data);
                     let dataString = data.toString();
                     let dataToJson = JSON.parse(dataString);
+                    console.log(dataString);
                     jsonOutput.push(dataToJson);
                     myOutput += dataString;
                 },

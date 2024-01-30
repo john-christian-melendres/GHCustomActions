@@ -16,9 +16,9 @@ export async function run(): Promise<void> {
     const options = {
       listeners: {
       stdout: (data: Buffer) => {
-      console.log(data)
       let dataString = data.toString();
       let dataToJson = JSON.parse(dataString)
+      console.log(dataString)
       jsonOutput.push(dataToJson)
       myOutput += dataString;
       },
