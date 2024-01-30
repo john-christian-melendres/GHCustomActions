@@ -25982,7 +25982,7 @@ async function run() {
                 }
             }
         };
-        await exec.exec('git', ['log', '--pretty=format:', '{%n  \"commit\": \"%H\",%n  \"author\": \"%an\",%n  \"date\": \"%ad\",%n  \"message\": \"%f\"%n},', `${startCommitHash}..${endCommitHash}`], options);
+        await exec.exec('git', ['log', '--pretty=format:', '{%n  \"commit\": \"%H\",%n  \"author\": \"%an\",%n  \"date\": \"%ad\",%n  \"message\": \"%f\"%n},', `${startCommitHash}^1..${endCommitHash}`], options);
         console.log(myOutput);
         console.log(myError);
         const test = `[${myOutput}]`;
