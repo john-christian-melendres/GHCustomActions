@@ -16,7 +16,7 @@ export async function run(): Promise<void> {
     const options = {
       listeners: {
       stdout: (data: Buffer) => {
-      let dataString = data.toString();
+      let dataString = data.toString().replace(/[']/g, '');
       let dataToJson = JSON.parse(dataString)
       console.log(dataString)
       jsonOutput.push(dataToJson)

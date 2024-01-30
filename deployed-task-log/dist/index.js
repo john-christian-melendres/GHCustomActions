@@ -25977,7 +25977,7 @@ async function run() {
         const options = {
             listeners: {
                 stdout: (data) => {
-                    let dataString = data.toString();
+                    let dataString = data.toString().replace(/[']/g, '');
                     let dataToJson = JSON.parse(dataString);
                     console.log(dataString);
                     jsonOutput.push(dataToJson);
