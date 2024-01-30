@@ -4,16 +4,16 @@ author: 'Your name or organization here'
 
 # Define your inputs here.
 inputs:
-  milliseconds:
+  commit-hash:
     description: 'Your input description here'
     required: true
-    default: '1000'
+    default: 'HEAD'
 
 # Define your outputs here.
 outputs:
-  time:
+  js-value:
     description: 'Your output description here'
 
 runs:
   using: node20
-  main: dist/deployed-task-log/index.js
+  main: ../dist/deployed-task-log/index.js

@@ -25967,7 +25967,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const exec = __importStar(__nccwpck_require__(1514));
 async function run() {
     try {
-        const startCommitHash = core.getInput('COMMIT_HASH', { trimWhitespace: true });
+        const startCommitHash = core.getInput('commit-hash', { trimWhitespace: true });
         const endCommitHash = 'HEAD';
         console.log(startCommitHash);
         let myOutput = '';
@@ -25987,7 +25987,7 @@ async function run() {
         console.log(myError);
         const test = `[${myOutput}]`;
         console.log(test);
-        core.setOutput('JS_VALUE', 'TEST VALUE');
+        core.setOutput('js-value', 'TEST VALUE');
         // // get log rawText
         // const logTxts = execSync(
         //   `git log --pretty=format:"{%n  #'#commit#'#: #'#%H#'#,%n  #'#abbreviated_commit#'#: #'#%h#'#,%n  #'#tree#'#: #'#%T#'#,%n  #'#abbreviated_tree#'#: #'#%t#'#,%n  #'#parent#'#: #'#%P#'#,%n  #'#abbreviated_parent#'#: #'#%p#'#,%n  #'#refs#'#: #'#%D#'#,%n  #'#encoding#'#: #'#%e#'#,%n  #'#subject#'#: #'#%s#'#,%n  #'#sanitized_subject_line#'#: #'#%f#'#,%n  #'#body#'#: #'#%b#'#,%n  #'#commit_notes#'#: #'#%N#'#,%n  #'#verification_flag#'#: #'#%G?#'#,%n  #'#signer#'#: #'#%GS#'#,%n  #'#signer_key#'#: #'#%GK#'#,%n  #'#author#'#: {%n    #'#name#'#: #'#%aN#'#,%n    #'#email#'#: #'#%aE#'#,%n    #'#date#'#: #'#%aD#'#%n  },%n  #'#commiter#'#: {%n    #'#name#'#: #'#%cN#'#,%n    #'#email#'#: #'#%cE#'#,%n    #'#date#'#: #'#%cD#'#%n  }%n}," ${startCommitHash}..${endCommitHash}`,
