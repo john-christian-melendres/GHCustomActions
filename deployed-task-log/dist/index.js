@@ -25967,7 +25967,8 @@ const core = __importStar(__nccwpck_require__(2186));
 const exec = __importStar(__nccwpck_require__(1514));
 async function run() {
     try {
-        const startCommitHash = core.getInput('commit-hash', { trimWhitespace: true, required: true });
+        // const startCommitHash = core.getInput('commit-hash', {trimWhitespace: true, required: true} )
+        const startCommitHash = 'HEAD';
         const endCommitHash = 'HEAD';
         console.log(startCommitHash);
         let myOutput = '';
@@ -25982,7 +25983,7 @@ async function run() {
                 }
             }
         };
-        await exec.exec('git', ['log', '--pretty=format:', `'{%n  \"commit\": \"%H\",%n  \"author\": \"%an\",%n  \"date\": \"%ad\",%n  \"message\": \"%f\"%n},'`, `${startCommitHash}^1..${endCommitHash}`], options);
+        await exec.exec('git', ['log', '--pretty=format:', `{%n  \"commit\": \"%H\",%n  \"author\": \"%an\",%n  \"date\": \"%ad\",%n  \"message\": \"%f\"%n},`, `${startCommitHash}^1..${endCommitHash}`], options);
         console.log(myOutput);
         console.log(myError);
         const test = `[${myOutput}]`;
