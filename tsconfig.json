@@ -8,7 +8,7 @@
     "baseUrl": "./",
     "sourceMap": true,
     "outDir": "./dist",
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
