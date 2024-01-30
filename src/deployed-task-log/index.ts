@@ -11,11 +11,16 @@ export async function run(): Promise<void> {
 
     let myOutput = '';
     let myError = '';
+    let jsonOutput: any = []
 
     const options = {
       listeners: {
       stdout: (data: Buffer) => {
-      myOutput += data.toString();
+      console.log(data)
+      let dataString = data.toString();
+      let dataToJson = JSON.parse(dataString)
+      jsonOutput.push(dataToJson)
+      myOutput += dataString;
       },
       stderr: (data: Buffer) => {
       myError += data.toString();
@@ -23,14 +28,13 @@ export async function run(): Promise<void> {
       }
     };
 
-    await exec.exec('git', ['log', `--pretty=format:'{%n  \"commit\": \"%H\",%n  \"author\": \"%an\",%n  \"date\": \"%ad\",%n  \"message\": \"%f\"%n},'` ,`${startCommitHash}^1..${endCommitHash}`],  options);
+    await exec.exec('git', ['log', `--pretty=format:'{%n  \"commit\": \"%H\",%n  \"author\": \"%an\",%n  \"date\": \"%ad\",%n  \"message\": \"%f\"%n}'` ,`${startCommitHash}^1..${endCommitHash}`],  options);
     console.log(myOutput);
     console.log(myError);
 
     const test = `[${myOutput}]`
-    const testJSON = JSON.parse(test)
     console.log("GEt JSON value")
-    console.log(testJSON[0].message)
+    console.log(jsonOutput[0].message)
 
     core.setOutput('js-value', test)
     // // get log rawTex"
