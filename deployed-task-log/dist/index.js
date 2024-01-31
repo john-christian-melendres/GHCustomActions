@@ -26003,8 +26003,7 @@ function updateLogURL(gitLog, repository) {
     if (pullRequestId) {
         url = `https://github.com/${repository}/pull/${pullRequestId}`;
     }
-    gitLog.url = url;
-    return gitLog;
+    return { ...gitLog, url };
 }
 function getMergePullRequestCommit(gitLogs) {
     let [mergePullRequestCommit] = gitLogs.filter(log => log.message.toLowerCase().includes('merge pull request'));

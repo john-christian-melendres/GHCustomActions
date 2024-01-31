@@ -54,9 +54,7 @@ function updateLogURL(gitLog: ICommitLog, repository: string): ICommitLog {
     url = `https://github.com/${repository}/pull/${pullRequestId}`
   }
 
-  gitLog.url = url;
-
-  return gitLog
+  return { ...gitLog, url}
 }
 
 function getMergePullRequestCommit(gitLogs: ICommitLog[]): string {
