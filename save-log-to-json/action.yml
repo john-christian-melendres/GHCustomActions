@@ -1,0 +1,19 @@
+name: 'List deployed task action'
+description: 'List the task deployed in an environment'
+author: ''
+
+inputs:
+  json:
+    description: 'Commit id to start'
+    required: true
+    default: 'HEAD'
+
+outputs:
+  json:
+    description: 'Commit logs'
+  json-string:
+    description: 'Commit logs'
+
+runs:
+  using: node20
+  main: dist/index.js
