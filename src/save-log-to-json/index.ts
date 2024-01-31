@@ -1,27 +1,23 @@
 import * as core from '@actions/core'
 import { writeFile, readFile, access, constants } from 'fs/promises'
 
+const FILENAME = 'log'
+
 async function run(): Promise<void> {
   try {
     const jsonInput = core.getInput('json', {trimWhitespace: true, required: true} ) || 'HEAD'
 
     await checkFile();
-
-    const data = await readFile("./log.json", "utf8");
+      
+    const data = await readFile(`${FILENAME}.json`, "utf8");
     const jsonInputData = JSON.parse(jsonInput);
     let fileData: IJsonSchema = JSON.parse(data);
 
-    
     fileData = { ...fileData, ...jsonInputData };
-    console.log(jsonInputData)
-    console.log(fileData)
 
-    await writeFile('log.json',JSON.stringify(fileData, null, 4))
+    await writeFile(`${FILENAME}.json`,JSON.stringify(fileData, null, 4))
 
-    const dataString = await readFile("./log.json", "utf8");
-
-    console.log(dataString)
-    console.log(fileData)
+    const dataString = await readFile(`${FILENAME}.json`, "utf8");
 
     core.setOutput('json', fileData);
     core.setOutput('json-string', dataString);
@@ -32,10 +28,10 @@ async function run(): Promise<void> {
 
 async function checkFile(): Promise<boolean> {
   try {
-    await access('log.json', constants.F_OK)
+    await access(`${FILENAME}.json`, constants.F_OK)
     return true
   } catch (error) {
-    await writeFile('log.json',JSON.stringify({}, null, 4))
+    await writeFile(`${FILENAME}.json`,JSON.stringify({}, null, 4))
     return false
   }
 }

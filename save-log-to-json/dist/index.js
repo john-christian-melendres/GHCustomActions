@@ -24733,20 +24733,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const promises_1 = __nccwpck_require__(3292);
+const FILENAME = 'log';
 async function run() {
     try {
         const jsonInput = core.getInput('json', { trimWhitespace: true, required: true }) || 'HEAD';
         await checkFile();
-        const data = await (0, promises_1.readFile)("./log.json", "utf8");
+        const data = await (0, promises_1.readFile)(`${FILENAME}.json`, "utf8");
         const jsonInputData = JSON.parse(jsonInput);
         let fileData = JSON.parse(data);
         fileData = { ...fileData, ...jsonInputData };
-        console.log(jsonInputData);
-        console.log(fileData);
-        await (0, promises_1.writeFile)('log.json', JSON.stringify(fileData, null, 4));
-        const dataString = await (0, promises_1.readFile)("./log.json", "utf8");
-        console.log(dataString);
-        console.log(fileData);
+        await (0, promises_1.writeFile)(`${FILENAME}.json`, JSON.stringify(fileData, null, 4));
+        const dataString = await (0, promises_1.readFile)(`${FILENAME}.json`, "utf8");
         core.setOutput('json', fileData);
         core.setOutput('json-string', dataString);
     }
@@ -24757,11 +24754,11 @@ async function run() {
 }
 async function checkFile() {
     try {
-        await (0, promises_1.access)('log.json', promises_1.constants.F_OK);
+        await (0, promises_1.access)(`${FILENAME}.json`, promises_1.constants.F_OK);
         return true;
     }
     catch (error) {
-        await (0, promises_1.writeFile)('log.json', JSON.stringify({}, null, 4));
+        await (0, promises_1.writeFile)(`${FILENAME}.json`, JSON.stringify({}, null, 4));
         return false;
     }
 }

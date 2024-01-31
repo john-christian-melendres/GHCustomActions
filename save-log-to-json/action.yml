@@ -6,7 +6,7 @@ inputs:
   json:
     description: 'Commit id to start'
     required: true
-    default: 'HEAD'
+    default: ''
 
 outputs:
   json:
