@@ -22,7 +22,7 @@ async function run(): Promise<void> {
         stdout: (data: Buffer) => {
           let dataString = data.toString().replace(/[']/g, '');
           let log: ICommitLog = JSON.parse(dataString);
-          updateLogURL(log, repository)
+          // updateLogURL(log, repository)
           console.log(log)
           gitLogs.push(log)
         },
