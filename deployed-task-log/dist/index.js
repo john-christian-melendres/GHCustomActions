@@ -25998,7 +25998,7 @@ async function run() {
 function updateLogURL(gitLog, repository) {
     if (!!repository)
         return;
-    let url = `https://github.com/${repository}/commit/${gitLog.commitId}`;
+    let url = `https://github.com/${repository}/commit/${gitLog.commit}`;
     let pullRequestId = gitLog.message?.match(/\(#(.*)\)/)?.pop();
     if (pullRequestId) {
         url = `https://github.com/${repository}/pull/${pullRequestId}`;
@@ -26007,7 +26007,7 @@ function updateLogURL(gitLog, repository) {
 }
 function getMergePullRequestCommit(gitLogs) {
     let [mergePullRequestCommit] = gitLogs.filter(log => log.message.toLowerCase().includes('merge pull request'));
-    return mergePullRequestCommit.commitId || '';
+    return mergePullRequestCommit.commit || '';
 }
 function removeMergePullRequestCommit(gitLogs) {
     return gitLogs.filter(log => !log.message.toLowerCase().includes('merge pull request'));

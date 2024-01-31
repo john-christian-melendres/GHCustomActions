@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import * as command from '@actions/exec'
 
 interface ICommitLog {
-  commitId: string;
+  commit: string;
   author: string;
   message: string;
   url: string;
@@ -47,7 +47,7 @@ async function run(): Promise<void> {
 function updateLogURL(gitLog: ICommitLog, repository: string): void {
   if (!!repository) return;
 
-  let url = `https://github.com/${repository}/commit/${gitLog.commitId}`
+  let url = `https://github.com/${repository}/commit/${gitLog.commit}`
   let pullRequestId = gitLog.message?.match(/\(#(.*)\)/)?.pop();
 
   if(pullRequestId) {
@@ -60,7 +60,7 @@ function updateLogURL(gitLog: ICommitLog, repository: string): void {
 function getMergePullRequestCommit(gitLogs: ICommitLog[]): string {
   let [ mergePullRequestCommit ] =  gitLogs.filter( log => log.message.toLowerCase().includes('merge pull request'))
 
-  return mergePullRequestCommit.commitId || '';
+  return mergePullRequestCommit.commit || '';
 }
 
 
