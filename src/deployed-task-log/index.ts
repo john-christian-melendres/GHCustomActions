@@ -21,8 +21,8 @@ async function run(): Promise<void> {
       listeners: {
         stdout: (data: Buffer) => {
           let dataString = data.toString().replace(/[']/g, '');
-          let log: ICommitLog = JSON.parse(dataString);
-          log.url = updateLogURL(log, repository)
+          let log = JSON.parse(dataString) as ICommitLog;
+          updateLogURL(log, repository)
           gitLogs.push(log)
         },
         stderr: (data: Buffer) => {
@@ -44,8 +44,8 @@ async function run(): Promise<void> {
   }
 }
 
-function updateLogURL(gitLog: ICommitLog, repository: string): string {
-  if (!!repository) return '';
+function updateLogURL(gitLog: ICommitLog, repository: string): void {
+  if (!repository) return;
 
   let url = `https://github.com/${repository}/commit/${gitLog.commit}`
   let pullRequestId = gitLog.message?.match(/\(#(.*)\)/)?.pop();
@@ -54,15 +54,13 @@ function updateLogURL(gitLog: ICommitLog, repository: string): string {
     url = `https://github.com/${repository}/pull/${pullRequestId}`
   }
 
-  console.log(url)
-
-  return url;
+  gitLog.url = url;
 }
 
 function getMergePullRequestCommit(gitLogs: ICommitLog[]): string {
   let [ mergePullRequestCommit ] =  gitLogs.filter( log => log.message.toLowerCase().includes('merge pull request'))
 
-  return mergePullRequestCommit?.commit || '';
+  return mergePullRequestCommit.commit || '';
 }
 
 
