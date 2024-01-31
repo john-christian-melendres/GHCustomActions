@@ -25962,60 +25962,56 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const exec = __importStar(__nccwpck_require__(1514));
+const command = __importStar(__nccwpck_require__(1514));
 async function run() {
     try {
-        // const startCommitHash = core.getInput('commit-hash', {trimWhitespace: true, required: true} )
-        const startCommitHash = 'HEAD';
+        const startCommitHash = core.getInput('commit-hash', { trimWhitespace: true, required: true }) || 'HEAD';
         const endCommitHash = 'HEAD';
-        console.log(startCommitHash);
-        let myOutput = '';
-        let myError = '';
-        let jsonOutput = [];
-        const options = {
+        const repository = core.getInput('repository', { trimWhitespace: true, required: true });
+        let gitLogs = [];
+        let execErrors = '';
+        const execOptions = {
             listeners: {
                 stdout: (data) => {
                     let dataString = data.toString().replace(/[']/g, '');
-                    let dataToJson = JSON.parse(dataString);
-                    console.log(dataString);
-                    jsonOutput.push(dataToJson);
-                    myOutput += dataString;
+                    let log = JSON.parse(dataString);
+                    updateLogURL(log, repository);
+                    gitLogs.push(log);
                 },
                 stderr: (data) => {
-                    myError += data.toString();
+                    execErrors += data.toString();
                 }
             }
         };
-        await exec.exec('git', ['log', `--pretty=format:'{%n  \"commit\": \"%H\",%n  \"author\": \"%an\",%n  \"date\": \"%ad\",%n  \"message\": \"%f\"%n}'`, `${startCommitHash}^1..${endCommitHash}`], options);
-        console.log(myOutput);
-        console.log(myError);
-        const test = `[${myOutput}]`;
-        console.log("GEt JSON value");
-        console.log(jsonOutput[0].message);
-        core.setOutput('js-value', test);
-        // // get log rawTex"
-        // const logTxts = execSync(
-        //   `git log --pretty=format:"{%n  #'#commit#'#: #'#%H#'#,%n  #'#abbreviated_commit#'#: #'#%h#'#,%n  #'#tree#'#: #'#%T#'#,%n  #'#abbreviated_tree#'#: #'#%t#'#,%n  #'#parent#'#: #'#%P#'#,%n  #'#abbreviated_parent#'#: #'#%p#'#,%n  #'#refs#'#: #'#%D#'#,%n  #'#encoding#'#: #'#%e#'#,%n  #'#subject#'#: #'#%s#'#,%n  #'#sanitized_subject_line#'#: #'#%f#'#,%n  #'#body#'#: #'#%b#'#,%n  #'#commit_notes#'#: #'#%N#'#,%n  #'#verification_flag#'#: #'#%G?#'#,%n  #'#signer#'#: #'#%GS#'#,%n  #'#signer_key#'#: #'#%GK#'#,%n  #'#author#'#: {%n    #'#name#'#: #'#%aN#'#,%n    #'#email#'#: #'#%aE#'#,%n    #'#date#'#: #'#%aD#'#%n  },%n  #'#commiter#'#: {%n    #'#name#'#: #'#%cN#'#,%n    #'#email#'#: #'#%cE#'#,%n    #'#date#'#: #'#%cD#'#%n  }%n}," ${startCommitHash}..${endCommitHash}`,
-        //   { encoding: 'utf8' }
-        // ).toString()
-        // // transform json
-        // const logJson = `[${logTxts.slice(0, -1).replace(/"/g, "'").replace(/#'#/g, '"')}]`
-        // fs.writeFileSync(path.join(__dirname, 'log.json'), logJson)
-        // // parse json and do what you need
-        // const subjectLines = JSON.parse(logJson).map(
-        //   item => item['sanitized_subject_line']
-        // )
-        // console.info('subjectLines', subjectLines)
-        // core.setOutput('JSONTEST', subjectLines )
+        await command.exec('git', ['log', `--pretty=format:'{%n  \"commit\": \"%H\",%n  \"author\": \"%an\",%n \"message\": \"%s\"%n}'`, `${startCommitHash}^1..${endCommitHash}`], execOptions);
+        const latestCommitId = getMergePullRequestCommit(gitLogs);
+        gitLogs = removeMergePullRequestCommit(gitLogs);
+        core.setOutput('json-value', gitLogs);
+        core.setOutput('latest-commit-id', latestCommitId);
     }
     catch (error) {
         if (error instanceof Error)
             core.setFailed(error.message);
     }
 }
-exports.run = run;
+function updateLogURL(gitLog, repository) {
+    if (!!repository)
+        return;
+    let url = `https://github.com/${repository}/commit/${gitLog.commitId}`;
+    let pullRequestId = gitLog.message?.match(/\(#(.*)\)/)?.pop();
+    if (pullRequestId) {
+        url = `https://github.com/${repository}/pull/${pullRequestId}`;
+    }
+    gitLog.url = url;
+}
+function getMergePullRequestCommit(gitLogs) {
+    let [mergePullRequestCommit] = gitLogs.filter(log => log.message.toLowerCase().includes('merge pull request'));
+    return mergePullRequestCommit.commitId || '';
+}
+function removeMergePullRequestCommit(gitLogs) {
+    return gitLogs.filter(log => !log.message.toLowerCase().includes('merge pull request'));
+}
 run();
 
 

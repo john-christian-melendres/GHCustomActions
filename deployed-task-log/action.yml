@@ -1,18 +1,22 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'List deployed task action'
+description: 'List the task deployed in an environment'
+author: ''
 
-# Define your inputs here.
 inputs:
   commit-hash:
-    description: 'Your input description here'
+    description: 'Commit id to start'
     required: true
     default: 'HEAD'
+  repository:
+    description: 'Current repository'
+    required: true
+    default: ''
 
-# Define your outputs here.
 outputs:
-  js-value:
-    description: 'Your output description here'
+  json-value:
+    description: 'Commit logs'
+  latest-commit-id:
+    description: 'Latest commit hash'
 
 runs:
   using: node20

@@ -1,64 +1,71 @@
 import * as core from '@actions/core'
-import * as exec from '@actions/exec'
+import * as command from '@actions/exec'
 
-export async function run(): Promise<void> {
+interface ICommitLog {
+  commitId: string;
+  author: string;
+  message: string;
+  url: string;
+}
+
+async function run(): Promise<void> {
   try {
-    // const startCommitHash = core.getInput('commit-hash', {trimWhitespace: true, required: true} )
-    const startCommitHash = 'HEAD'
+    const startCommitHash = core.getInput('commit-hash', {trimWhitespace: true, required: true} ) || 'HEAD'
     const endCommitHash = 'HEAD'
+    const repository = core.getInput('repository', {trimWhitespace: true, required: true} )
+    
+    let gitLogs: ICommitLog[] = []
+    let execErrors = '';
 
-    console.log(startCommitHash)
-
-    let myOutput = '';
-    let myError = '';
-    let jsonOutput: any = []
-
-    const options = {
+    const execOptions = {
       listeners: {
-      stdout: (data: Buffer) => {
-      let dataString = data.toString().replace(/[']/g, '');
-      let dataToJson = JSON.parse(dataString)
-      console.log(dataString)
-      jsonOutput.push(dataToJson)
-      myOutput += dataString;
-      },
-      stderr: (data: Buffer) => {
-      myError += data.toString();
-      }
+        stdout: (data: Buffer) => {
+          let dataString = data.toString().replace(/[']/g, '');
+          let log = JSON.parse(dataString) as ICommitLog;
+          updateLogURL(log, repository)
+          gitLogs.push(log)
+        },
+        stderr: (data: Buffer) => {
+          execErrors += data.toString();
+        }
       }
     };
 
-    await exec.exec('git', ['log', `--pretty=format:'{%n  \"commit\": \"%H\",%n  \"author\": \"%an\",%n  \"date\": \"%ad\",%n  \"message\": \"%f\"%n}'` ,`${startCommitHash}^1..${endCommitHash}`],  options);
-    console.log(myOutput);
-    console.log(myError);
+    await command.exec('git', ['log', `--pretty=format:'{%n  \"commit\": \"%H\",%n  \"author\": \"%an\",%n \"message\": \"%s\"%n}'` ,`${startCommitHash}^1..${endCommitHash}`],  execOptions);
 
-    const test = `[${myOutput}]`
-    console.log("GEt JSON value")
-    console.log(jsonOutput[0].message)
-
-    core.setOutput('js-value', test)
-    // // get log rawTex"
-    // const logTxts = execSync(
-    //   `git log --pretty=format:"{%n  #'#commit#'#: #'#%H#'#,%n  #'#abbreviated_commit#'#: #'#%h#'#,%n  #'#tree#'#: #'#%T#'#,%n  #'#abbreviated_tree#'#: #'#%t#'#,%n  #'#parent#'#: #'#%P#'#,%n  #'#abbreviated_parent#'#: #'#%p#'#,%n  #'#refs#'#: #'#%D#'#,%n  #'#encoding#'#: #'#%e#'#,%n  #'#subject#'#: #'#%s#'#,%n  #'#sanitized_subject_line#'#: #'#%f#'#,%n  #'#body#'#: #'#%b#'#,%n  #'#commit_notes#'#: #'#%N#'#,%n  #'#verification_flag#'#: #'#%G?#'#,%n  #'#signer#'#: #'#%GS#'#,%n  #'#signer_key#'#: #'#%GK#'#,%n  #'#author#'#: {%n    #'#name#'#: #'#%aN#'#,%n    #'#email#'#: #'#%aE#'#,%n    #'#date#'#: #'#%aD#'#%n  },%n  #'#commiter#'#: {%n    #'#name#'#: #'#%cN#'#,%n    #'#email#'#: #'#%cE#'#,%n    #'#date#'#: #'#%cD#'#%n  }%n}," ${startCommitHash}..${endCommitHash}`,
-    //   { encoding: 'utf8' }
-    // ).toString()
-
-    // // transform json
-    // const logJson = `[${logTxts.slice(0, -1).replace(/"/g, "'").replace(/#'#/g, '"')}]`
-
-    // fs.writeFileSync(path.join(__dirname, 'log.json'), logJson)
-
-    // // parse json and do what you need
-    // const subjectLines = JSON.parse(logJson).map(
-    //   item => item['sanitized_subject_line']
-    // )
-    // console.info('subjectLines', subjectLines)
-
-    // core.setOutput('JSONTEST', subjectLines )
+    const latestCommitId = getMergePullRequestCommit(gitLogs);
+    gitLogs = removeMergePullRequestCommit(gitLogs);
+    
+    core.setOutput('json-value', gitLogs)
+    core.setOutput('latest-commit-id', latestCommitId)
+  
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
 }
 
+function updateLogURL(gitLog: ICommitLog, repository: string): void {
+  if (!!repository) return;
+
+  let url = `https://github.com/${repository}/commit/${gitLog.commitId}`
+  let pullRequestId = gitLog.message?.match(/\(#(.*)\)/)?.pop();
+
+  if(pullRequestId) {
+    url = `https://github.com/${repository}/pull/${pullRequestId}`
+  }
+
+  gitLog.url = url;
+}
+
+function getMergePullRequestCommit(gitLogs: ICommitLog[]): string {
+  let [ mergePullRequestCommit ] =  gitLogs.filter( log => log.message.toLowerCase().includes('merge pull request'))
+
+  return mergePullRequestCommit.commitId || '';
+}
+
+
+function removeMergePullRequestCommit(gitLogs: ICommitLog[]): ICommitLog[] {
+  return gitLogs.filter( log => !log.message.toLowerCase().includes('merge pull request'))
+}
 
 run();
