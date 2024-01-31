@@ -34,11 +34,11 @@ async function run(): Promise<void> {
 
     await command.exec('git', ['log', `--pretty=format:'{%n  \"commit\": \"%H\",%n  \"author\": \"%an\",%n \"message\": \"%s\"%n}'` ,`${startCommitHash}^1..${endCommitHash}`],  execOptions);
 
-    const latestCommitId = getMergePullRequestCommit(gitLogs);
-    gitLogs = removeMergePullRequestCommit(gitLogs);
+    // const latestCommitId = getMergePullRequestCommit(gitLogs);
+    // gitLogs = removeMergePullRequestCommit(gitLogs);
     
     core.setOutput('json-value', gitLogs)
-    core.setOutput('latest-commit-id', latestCommitId)
+    core.setOutput('latest-commit-id', "latestCommitId")
   
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
