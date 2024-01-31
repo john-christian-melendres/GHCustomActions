@@ -22,7 +22,7 @@ async function run(): Promise<void> {
         stdout: (data: Buffer) => {
           let dataString = data.toString().replace(/[']/g, '');
           let log: ICommitLog = JSON.parse(dataString);
-          log = updateLogURL(log, repository)
+          updateLogURL(log, repository)
           gitLogs.push(log)
         },
         stderr: (data: Buffer) => {
@@ -44,8 +44,8 @@ async function run(): Promise<void> {
   }
 }
 
-function updateLogURL(gitLog: ICommitLog, repository: string): ICommitLog {
-  if (!!repository) return gitLog;
+function updateLogURL(gitLog: ICommitLog, repository: string): void {
+  if (!!repository) return;
 
   let url = `https://github.com/${repository}/commit/${gitLog.commit}`
   let pullRequestId = gitLog.message?.match(/\(#(.*)\)/)?.pop();
@@ -55,8 +55,6 @@ function updateLogURL(gitLog: ICommitLog, repository: string): ICommitLog {
   }
 
   gitLog.url = url;
-
-  return gitLog;
 }
 
 function getMergePullRequestCommit(gitLogs: ICommitLog[]): string {
