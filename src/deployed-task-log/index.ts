@@ -22,7 +22,7 @@ async function run(): Promise<void> {
         stdout: (data: Buffer) => {
           let dataString = data.toString().replace(/[']/g, '');
           let log: ICommitLog = JSON.parse(dataString);
-          updateLogURL(log, repository)
+          log = updateLogURL(log, repository)
           gitLogs.push(log)
         },
         stderr: (data: Buffer) => {
@@ -33,19 +33,19 @@ async function run(): Promise<void> {
 
     await command.exec('git', ['log', `--pretty=format:'{%n  \"commit\": \"%H\",%n  \"author\": \"%an\",%n \"message\": \"%s\"%n}'` ,`${startCommitHash}^1..${endCommitHash}`],  execOptions);
 
-    // const latestCommitId = getMergePullRequestCommit(gitLogs);
-    // gitLogs = removeMergePullRequestCommit(gitLogs);
+    const latestCommitId = getMergePullRequestCommit(gitLogs);
+    gitLogs = removeMergePullRequestCommit(gitLogs);
     
     core.setOutput('json-value', gitLogs)
-    core.setOutput('latest-commit-id', "latestCommitId")
+    core.setOutput('latest-commit-id', latestCommitId)
   
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
 }
 
-function updateLogURL(gitLog: ICommitLog, repository: string): void {
-  if (!!repository) return;
+function updateLogURL(gitLog: ICommitLog, repository: string): ICommitLog {
+  if (!!repository) return gitLog;
 
   let url = `https://github.com/${repository}/commit/${gitLog.commit}`
   let pullRequestId = gitLog.message?.match(/\(#(.*)\)/)?.pop();
@@ -55,6 +55,8 @@ function updateLogURL(gitLog: ICommitLog, repository: string): void {
   }
 
   gitLog.url = url;
+
+  return gitLog;
 }
 
 function getMergePullRequestCommit(gitLogs: ICommitLog[]): string {
