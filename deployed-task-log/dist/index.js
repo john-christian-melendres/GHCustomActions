@@ -25977,6 +25977,7 @@ async function run() {
                     let dataString = data.toString().replace(/[']/g, '');
                     let log = JSON.parse(dataString);
                     updateLogURL(log, repository);
+                    console.log(log);
                     gitLogs.push(log);
                 },
                 stderr: (data) => {
