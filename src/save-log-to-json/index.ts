@@ -16,7 +16,7 @@ async function run(): Promise<void> {
 
     fileData = { ...fileData, ...jsonInputData };
 
-    await writeFile('./log.json',JSON.stringify({}, null, 4))
+    await writeFile('log.json',JSON.stringify({}, null, 4))
 
     const dataString = await readFile("./log.json", "utf8");
 
@@ -32,10 +32,10 @@ async function run(): Promise<void> {
 
 async function checkFile(): Promise<boolean> {
   try {
-    await access('./log.json', constants.F_OK)
+    await access('log.json', constants.F_OK)
     return true
   } catch (error) {
-    await writeFile('./log.json',JSON.stringify({}, null, 4))
+    await writeFile('log.json',JSON.stringify({}, null, 4))
     return false
   }
 }

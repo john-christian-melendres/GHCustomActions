@@ -24743,7 +24743,7 @@ async function run() {
         console.log(jsonInputData);
         console.log(fileData);
         fileData = { ...fileData, ...jsonInputData };
-        await (0, promises_1.writeFile)('./log.json', JSON.stringify({}, null, 4));
+        await (0, promises_1.writeFile)('log.json', JSON.stringify({}, null, 4));
         const dataString = await (0, promises_1.readFile)("./log.json", "utf8");
         console.log(dataString);
         console.log(fileData);
@@ -24757,11 +24757,11 @@ async function run() {
 }
 async function checkFile() {
     try {
-        await (0, promises_1.access)('./log.json', promises_1.constants.F_OK);
+        await (0, promises_1.access)('log.json', promises_1.constants.F_OK);
         return true;
     }
     catch (error) {
-        await (0, promises_1.writeFile)('./log.json', JSON.stringify({}, null, 4));
+        await (0, promises_1.writeFile)('log.json', JSON.stringify({}, null, 4));
         return false;
     }
 }
