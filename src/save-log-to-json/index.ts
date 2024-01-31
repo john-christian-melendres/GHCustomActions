@@ -11,12 +11,12 @@ async function run(): Promise<void> {
     const jsonInputData = JSON.parse(jsonInput);
     let fileData: IJsonSchema = JSON.parse(data);
 
+    
+    fileData = { ...fileData, ...jsonInputData };
     console.log(jsonInputData)
     console.log(fileData)
 
-    fileData = { ...fileData, ...jsonInputData };
-
-    await writeFile('log.json',JSON.stringify({}, null, 4))
+    await writeFile('log.json',JSON.stringify(fileData, null, 4))
 
     const dataString = await readFile("./log.json", "utf8");
 

@@ -24740,10 +24740,10 @@ async function run() {
         const data = await (0, promises_1.readFile)("./log.json", "utf8");
         const jsonInputData = JSON.parse(jsonInput);
         let fileData = JSON.parse(data);
+        fileData = { ...fileData, ...jsonInputData };
         console.log(jsonInputData);
         console.log(fileData);
-        fileData = { ...fileData, ...jsonInputData };
-        await (0, promises_1.writeFile)('log.json', JSON.stringify({}, null, 4));
+        await (0, promises_1.writeFile)('log.json', JSON.stringify(fileData, null, 4));
         const dataString = await (0, promises_1.readFile)("./log.json", "utf8");
         console.log(dataString);
         console.log(fileData);
