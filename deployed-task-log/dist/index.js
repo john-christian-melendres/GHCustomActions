@@ -26007,7 +26007,7 @@ function updateLogURL(gitLog, repository) {
 }
 function getMergePullRequestCommit(gitLogs) {
     let [mergePullRequestCommit] = gitLogs.filter(log => log.message.toLowerCase().includes('merge pull request'));
-    return mergePullRequestCommit.commit || '';
+    return mergePullRequestCommit?.commit || '';
 }
 function removeMergePullRequestCommit(gitLogs) {
     return gitLogs.filter(log => !log.message.toLowerCase().includes('merge pull request'));
