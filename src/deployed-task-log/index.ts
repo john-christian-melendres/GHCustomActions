@@ -60,7 +60,7 @@ function updateLogURL(gitLog: ICommitLog, repository: string): void {
 function getMergePullRequestCommit(gitLogs: ICommitLog[]): string {
   let [ mergePullRequestCommit ] =  gitLogs.filter( log => log.message.toLowerCase().includes('merge pull request'))
 
-  return mergePullRequestCommit.commit || '';
+  return mergePullRequestCommit?.commit || '';
 }
 
 
