@@ -28829,7 +28829,8 @@ async function run() {
             name: 'COMMIT_INTEGRATION',
             value: newValue,
             headers: {
-                'X-GitHub-Api-Version': '2022-11-28'
+                'X-GitHub-Api-Version': '2022-11-28',
+                accept: 'application/vnd.github+json'
             }
         });
         console.log({ test, env, newValue, variableName, prefix, repository });
