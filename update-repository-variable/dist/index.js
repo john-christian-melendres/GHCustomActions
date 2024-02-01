@@ -28807,14 +28807,26 @@ async function run() {
         if (variableName) {
             repositoryVariable = variableName;
         }
+        console.log(prefix);
+        console.log(newValue);
+        console.log(env);
+        console.log(repositoryVariable);
+        console.log(variableName);
         const [owner, repo] = repository.split('/');
-        if (!token)
-            return;
+        console.log(owner, repo);
+        // if(!token) return ;
         const octokit = new rest_1.Octokit({ auth: token });
-        const test = await octokit.request(`PATCH /repos/${owner}/${repo}/actions/variables/${repositoryVariable}`, {
-            owner,
-            repo,
-            name: repositoryVariable,
+        // const test = await octokit.request(`PATCH /repos/${owner}/${repo}/actions/variables/${repositoryVariable}`, {
+        //     owner,
+        //     repo,
+        //     name: repositoryVariable,
+        //     value: newValue,
+        //     headers: {
+        //       'X-GitHub-Api-Version': '2022-11-28'
+        //     }
+        //   })
+        const test = await octokit.request(`PATCH /repos/Zollner-Group/Profilservice/actions/variables/COMMIT_INTEGRATION`, {
+            name: 'COMMIT_INTEGRATION',
             value: newValue,
             headers: {
                 'X-GitHub-Api-Version': '2022-11-28'
