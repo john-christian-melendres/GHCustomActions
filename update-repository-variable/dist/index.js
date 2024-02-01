@@ -28821,6 +28821,7 @@ async function run() {
             }
         });
         console.log({ test, env, newValue, variableName, prefix, repository });
+        core.setOutput('json-value', { test, env, newValue, variableName, prefix, repository });
     }
     catch (error) {
         if (error instanceof Error)
