@@ -49,10 +49,12 @@ async function run(): Promise<void> {
         }
       })
 
+    console.log(test)
     console.log({test,env,newValue,variableName,prefix,repository })
     core.setOutput('json-value', {test,env,newValue,variableName,prefix,repository })
 
   } catch (error) {
+    console.log(error)
     if (error instanceof Error) core.setFailed(error.message)
   }
 }
