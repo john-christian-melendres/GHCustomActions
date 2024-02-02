@@ -1,0 +1,29 @@
+name: 'Update repository variable'
+description: 'List the task deployed in an environment'
+
+inputs:
+  token:
+    description: 'Github token'
+    required: true
+    default: ''
+  repository:
+    description: 'Current repository'
+    required: true
+    default: ''
+  new-value:
+    description: 'New value for the repository variable'
+    required: true
+    default: ''
+  environment:
+    description: 'Environment name'
+    default: ''
+  prefix:
+    description: ''
+    default: ''
+  variable-name: 
+    description: ''
+    default: ''
+
+runs:
+  using: node20
+  main: dist/index.js
