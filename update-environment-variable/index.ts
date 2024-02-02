@@ -4,7 +4,7 @@ import { Octokit } from '@octokit/rest'
 async function run(): Promise<void> {
   try {
     const token = core.getInput('token', { trimWhitespace: true, required: true }) || ''; 
-    const repository = core.getInput('repository', { trimWhitespace: true, required: true }) || '';
+    const repositoryId = core.getInput('repository', { trimWhitespace: true, required: true }) || '';
     const newValue = core.getInput('new-value', { trimWhitespace: true, required: true }) || '';
     const variableName =  core.getInput('variable-name', { trimWhitespace: true }) || 'VAR_TEST';
     const env = core.getInput('environment', { trimWhitespace: true }) || 'INTEGRATION';
@@ -21,7 +21,7 @@ async function run(): Promise<void> {
     const octokit = new Octokit({ auth: token });
 
     await octokit.request(
-      `PATCH /repos/${repository}/actions/variables/${repositoryVariable}`,
+      `PATCH /repos/${repositoryId}/actions/variables/${repositoryVariable}`,
       {
         name: repositoryVariable,
         value: newValue,
