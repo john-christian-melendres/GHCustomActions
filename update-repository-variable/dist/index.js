@@ -28764,7 +28764,7 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 7541:
+/***/ 6916:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -28800,7 +28800,7 @@ async function run() {
         const token = core.getInput('token', { trimWhitespace: true, required: true }) || '';
         const repository = core.getInput('repository', { trimWhitespace: true, required: true }) || '';
         const newValue = core.getInput('new-value', { trimWhitespace: true, required: true }) || '';
-        const variableName = core.getInput('variable-name', { trimWhitespace: true }) || '';
+        const variableName = core.getInput('variable-name', { trimWhitespace: true }) || 'VAR_TEST';
         const env = core.getInput('environment', { trimWhitespace: true }) || 'INTEGRATION';
         const prefix = core.getInput('prefix', { trimWhitespace: true }) || '';
         let repositoryVariable = `${prefix.toLowerCase()}${env.toUpperCase()}`;
@@ -30714,7 +30714,7 @@ module.exports = parseParams
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(7541);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(6916);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()

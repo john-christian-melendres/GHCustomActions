@@ -1,18 +1,35 @@
-name: 'List deployed task action'
-description: 'List the task deployed in an environment'
-author: ''
+name: 'Save logs to json action'
+description: 'Save logs to json file'
 
 inputs:
   json:
-    description: 'Commit id to start'
+    description: 'json to data to add in files'
     required: true
-    default: ''
+    default: '{}'
 
 outputs:
   json:
-    description: 'Commit logs'
+    description: | 
+      'Save log data structure
+        {
+          status: string;
+          environment: string;
+          repository: string;
+          runBy: string;
+          packageName: string;
+          latestCommitHash: string;
+          commitLogs: [
+            {
+              commit: string;
+              author: string;
+              message: string;
+              url: string;
+            }
+          ];
+        }
+      '
   json-string:
-    description: 'Commit logs'
+    description: 'Data from json file in string form'
 
 runs:
   using: node20

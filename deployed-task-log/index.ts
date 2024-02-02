@@ -1,20 +1,13 @@
 import * as core from '@actions/core'
 import * as command from '@actions/exec'
 
-interface ICommitLog {
-  commit: string;
-  author: string;
-  message: string;
-  url: string;
-}
-
 async function run(): Promise<void> {
   try {
-    const startCommitHash = core.getInput('commit-hash', {trimWhitespace: true, required: true} ) || 'HEAD'
-    const endCommitHash = 'HEAD'
-    const repository = core.getInput('repository', {trimWhitespace: true, required: true} )
+    const startCommitHash = core.getInput('commit-hash', {trimWhitespace: true, required: true} ) || 'HEAD';
+    const endCommitHash = 'HEAD';
+    const repository = core.getInput('repository', {trimWhitespace: true, required: true} );
     
-    let gitLogs: ICommitLog[] = []
+    let gitLogs: ICommitLog[] = [];
     let execErrors = '';
 
     const execOptions = {
@@ -36,36 +29,43 @@ async function run(): Promise<void> {
     const latestCommitId = getMergePullRequestCommit(gitLogs);
     gitLogs = removeMergePullRequestCommit(gitLogs);
     
-    core.setOutput('json-value', gitLogs)
-    core.setOutput('latest-commit-id', latestCommitId)
+    core.setOutput('json-value', gitLogs);
+    core.setOutput('latest-commit-id', latestCommitId);
   
   } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
+    if (error instanceof Error) core.setFailed(error.message);
   }
 }
 
 function updateLogURL(gitLog: ICommitLog, repository: string): void {
   if (!repository) return;
 
-  let url = `https://github.com/${repository}/commit/${gitLog.commit}`
+  let url = `https://github.com/${repository}/commit/${gitLog.commit}`;
   let pullRequestId = gitLog.message?.match(/\(#(.*)\)/)?.pop();
 
   if(pullRequestId) {
-    url = `https://github.com/${repository}/pull/${pullRequestId}`
+    url = `https://github.com/${repository}/pull/${pullRequestId}`;
   }
 
   gitLog.url = url;
 }
 
 function getMergePullRequestCommit(gitLogs: ICommitLog[]): string {
-  let [ mergePullRequestCommit ] =  gitLogs.filter( log => log.message.toLowerCase().includes('merge pull request'))
+  let [ mergePullRequestCommit ] =  gitLogs.filter( log => log.message.toLowerCase().includes('merge pull request'));
 
   return mergePullRequestCommit?.commit || '';
 }
 
 
 function removeMergePullRequestCommit(gitLogs: ICommitLog[]): ICommitLog[] {
-  return gitLogs.filter( log => !log.message.toLowerCase().includes('merge pull request'))
+  return gitLogs.filter( log => !log.message.toLowerCase().includes('merge pull request'));
 }
 
 run();
+
+interface ICommitLog {
+  commit: string;
+  author: string;
+  message: string;
+  url: string;
+}

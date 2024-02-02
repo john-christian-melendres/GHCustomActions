@@ -1,22 +1,31 @@
 name: 'List deployed task action'
 description: 'List the task deployed in an environment'
-author: ''
 
 inputs:
   commit-hash:
-    description: 'Commit id to start'
+    description: 'Commit id to start query'
     required: true
     default: 'HEAD'
   repository:
-    description: 'Current repository'
+    description: 'Github repository'
     required: true
     default: ''
 
 outputs:
   json-value:
-    description: 'Commit logs'
+    description: | 
+      'Commit logs data structure
+       [
+        {
+          commit: string;
+          author: string;
+          message: string;
+          url: string;
+        }
+       ]
+      '
   latest-commit-id:
-    description: 'Latest commit hash'
+    description: 'Latest commit id'
 
 runs:
   using: node20

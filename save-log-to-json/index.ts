@@ -1,11 +1,11 @@
 import * as core from '@actions/core'
 import { writeFile, readFile, access, constants } from 'fs/promises'
 
-const FILENAME = 'log'
+const FILENAME = 'log';
 
 async function run(): Promise<void> {
   try {
-    const jsonInput = core.getInput('json', {trimWhitespace: true, required: true} ) || 'HEAD'
+    const jsonInput = core.getInput('json', {trimWhitespace: true, required: true} ) || 'HEAD';
 
     await checkFile();
       
@@ -15,7 +15,7 @@ async function run(): Promise<void> {
 
     fileData = { ...fileData, ...jsonInputData };
 
-    await writeFile(`${FILENAME}.json`,JSON.stringify(fileData, null, 4))
+    await writeFile(`${FILENAME}.json`,JSON.stringify(fileData, null, 4));
 
     const dataString = await readFile(`${FILENAME}.json`, "utf8");
 
@@ -36,7 +36,7 @@ async function checkFile(): Promise<boolean> {
   }
 }
 
-run()
+run();
 
 interface IJsonSchema {
     status: string;
@@ -48,7 +48,8 @@ interface IJsonSchema {
     commitLogs: {
       commit: string;
       author: string;
-      message: string
+      message: string;
+      url: string;
     }[];
     
   }
