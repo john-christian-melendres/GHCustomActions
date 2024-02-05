@@ -11,11 +11,11 @@ runs:
 
   steps:
     - run: |
-        curl -H "Authorization: token ${{ inputs.token }}" https://raw.githubusercontent.com/john-christian-melendres/GHCustomActions/main/semantic-release/package.json
+        curl -O -H "Authorization: token ${{ inputs.token }}" https://raw.githubusercontent.com/john-christian-melendres/GHCustomActions/main/semantic-release/package.json
       shell: bash
   
     - run: |
-        curl -H "Authorization: token ${{ inputs.token }}" https://raw.githubusercontent.com/john-christian-melendres/GHCustomActions/main/semantic-release/release.config.js
+        curl -O -H "Authorization: token ${{ inputs.token }}" https://raw.githubusercontent.com/john-christian-melendres/GHCustomActions/main/semantic-release/release.config.js
       shell: bash
 
     - run: |
