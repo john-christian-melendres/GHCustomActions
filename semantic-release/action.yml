@@ -1,0 +1,25 @@
+name: Setup semantic release action
+description: 'Setup semantic release action'
+
+inputs: 
+  token: 
+    description: 'Github Token'
+    required: true
+
+runs:
+  using: "composite"
+
+  steps:
+    - run: |
+        curl -H "Authorization: token ${{ inputs.token }}" https://raw.githubusercontent.com/john-christian-melendres/GHCustomActions/main/semantic-release/package.json
+    - run: |
+        curl -H "Authorization: token ${{ inputs.token }}" https://raw.githubusercontent.com/john-christian-melendres/GHCustomActions/main/semantic-release/release.config.js
+     - run: |
+        ls
+    - name : Install Dependencies
+      run: npm i
+
+    - run: npx semantic-release
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+    
