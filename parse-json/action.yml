@@ -1,0 +1,19 @@
+name: 'Parse JSON action'
+description: 'parse json base on'
+
+inputs:
+  json:
+    description: 'json to data to add in files'
+    required: true
+    default: '{}'
+  excluded:
+    description: 'comma separated values to'
+    default: ''
+
+  outputs:
+  text:
+    description: 'plain text separate by new line'
+  
+runs:
+  using: node20
+  main: dist/index.js
