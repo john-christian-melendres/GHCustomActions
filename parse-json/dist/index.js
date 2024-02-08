@@ -24735,7 +24735,7 @@ const core = __importStar(__nccwpck_require__(2186));
 async function run() {
     try {
         const jsonInput = core.getInput('json', { trimWhitespace: true, required: true }) || '{}';
-        const excludedInput = core.getInput('excluded', { trimWhitespace: true, required: true }) || '';
+        const excludedInput = core.getInput('excluded', { trimWhitespace: true, required: false }) || '';
         const excludedJsonProperty = normalizeExcludeInput(excludedInput);
         const jsonInputData = JSON.parse(jsonInput);
         core.setOutput('text', formatToStringSeparatedByNewline(jsonInputData, excludedJsonProperty));

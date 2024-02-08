@@ -3,7 +3,7 @@ import * as core from '@actions/core'
 async function run(): Promise<void> {
   try {
     const jsonInput = core.getInput('json', { trimWhitespace: true, required: true }) || '{}';
-    const excludedInput = core.getInput('excluded', { trimWhitespace: true }) || '';
+    const excludedInput = core.getInput('excluded', { trimWhitespace: true, required: false }) || '';
 
     const excludedJsonProperty = normalizeExcludeInput(excludedInput);
     const jsonInputData = JSON.parse(jsonInput);
