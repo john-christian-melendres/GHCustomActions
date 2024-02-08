@@ -24739,8 +24739,8 @@ async function run() {
         const jsonInput = core.getInput('json', { trimWhitespace: true, required: true }) || 'HEAD';
         await checkFile();
         const data = await (0, promises_1.readFile)(`${FILENAME}.json`, "utf8");
-        const jsonInputData = JSON.parse(jsonInput);
-        let fileData = JSON.parse(data);
+        const jsonInputData = fixJsonString(jsonInput);
+        let fileData = fixJsonString(data);
         fileData = { ...fileData, ...jsonInputData };
         await (0, promises_1.writeFile)(`${FILENAME}.json`, JSON.stringify(fileData, null, 4));
         const dataString = await (0, promises_1.readFile)(`${FILENAME}.json`, "utf8");
@@ -24761,6 +24761,10 @@ async function checkFile() {
         await (0, promises_1.writeFile)(`${FILENAME}.json`, JSON.stringify({}, null, 4));
         return false;
     }
+}
+function fixJsonString(str) {
+    const fixedStr = str.replace(/'/g, '"').replace(/(\w+):/g, '"$1":');
+    return JSON.parse(fixedStr);
 }
 run();
 

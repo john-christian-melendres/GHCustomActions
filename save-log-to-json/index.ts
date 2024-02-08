@@ -10,8 +10,8 @@ async function run(): Promise<void> {
     await checkFile();
       
     const data = await readFile(`${FILENAME}.json`, "utf8");
-    const jsonInputData = JSON.parse(jsonInput);
-    let fileData: IJsonSchema = JSON.parse(data);
+    const jsonInputData = fixJsonString(jsonInput);
+    let fileData: IJsonSchema = fixJsonString(data);
 
     fileData = { ...fileData, ...jsonInputData };
 
@@ -35,6 +35,11 @@ async function checkFile(): Promise<boolean> {
     return false
   }
 }
+
+function fixJsonString(str) {
+  const fixedStr = str.replace(/'/g, '"').replace(/(\w+):/g, '"$1":');
+  return JSON.parse(fixedStr);
+ }
 
 run();
 
