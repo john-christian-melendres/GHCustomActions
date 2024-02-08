@@ -8,20 +8,16 @@ async function run(): Promise<void> {
     const jsonInput = core.getMultilineInput('json', {trimWhitespace: true, required: true} ) || '';
 
     await checkFile();
-    console.log('jsonInput', jsonInput)  
+
     const data = await readFile(`${FILENAME}.json`, "utf8");
     const jsonInputData = inputToJson(jsonInput);
-    console.log('jsonInputData', jsonInputData)
-    let fileData: IJsonSchema = JSON.parse(data);
-    console.log('fileData',fileData)
 
+    let fileData: IJsonSchema = JSON.parse(data);
     fileData = { ...fileData, ...jsonInputData };
-    console.log('fileData',fileData)
 
     await writeFile(`${FILENAME}.json`,JSON.stringify(fileData, null, 4));
 
     const dataString = await readFile(`${FILENAME}.json`, "utf8");
-    console.log('dataString',dataString)
 
     core.setOutput('json', fileData);
     core.setOutput('json-string', dataString);
@@ -54,11 +50,6 @@ function inputToJson(input: string[]) {
 
   return json;
 }
-
-function fixJsonString(str) {
-  const fixedStr = str.replace(/'/g, '"').replace(/(\w+):/g, '"$1":');
-  return JSON.parse(fixedStr);
- }
 
 run();
 

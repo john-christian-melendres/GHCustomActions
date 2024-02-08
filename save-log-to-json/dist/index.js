@@ -24738,17 +24738,12 @@ async function run() {
     try {
         const jsonInput = core.getMultilineInput('json', { trimWhitespace: true, required: true }) || '';
         await checkFile();
-        console.log('jsonInput', jsonInput);
         const data = await (0, promises_1.readFile)(`${FILENAME}.json`, "utf8");
         const jsonInputData = inputToJson(jsonInput);
-        console.log('jsonInputData', jsonInputData);
         let fileData = JSON.parse(data);
-        console.log('fileData', fileData);
         fileData = { ...fileData, ...jsonInputData };
-        console.log('fileData', fileData);
         await (0, promises_1.writeFile)(`${FILENAME}.json`, JSON.stringify(fileData, null, 4));
         const dataString = await (0, promises_1.readFile)(`${FILENAME}.json`, "utf8");
-        console.log('dataString', dataString);
         core.setOutput('json', fileData);
         core.setOutput('json-string', dataString);
     }
@@ -24778,10 +24773,6 @@ function inputToJson(input) {
         }
     });
     return json;
-}
-function fixJsonString(str) {
-    const fixedStr = str.replace(/'/g, '"').replace(/(\w+):/g, '"$1":');
-    return JSON.parse(fixedStr);
 }
 run();
 
