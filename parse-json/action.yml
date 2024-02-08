@@ -8,6 +8,7 @@ inputs:
     default: '{}'
   excluded:
     description: 'comma separated values to'
+    required: false
     default: ''
 
   outputs:
