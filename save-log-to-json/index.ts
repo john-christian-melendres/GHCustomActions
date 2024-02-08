@@ -45,8 +45,8 @@ function inputToJson(input: string[]) {
 
   input.forEach(element => {
     if(element) {
-      const key = element.split(':').shift();
-      const value = element.split(':').slice(1).join(":");
+      const key = element.split(':').shift()?.trim();
+      const value = element.split(':').slice(1).join(":").trim();
 
       if(key) json[key] = value;
     }

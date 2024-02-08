@@ -24736,11 +24736,11 @@ const promises_1 = __nccwpck_require__(3292);
 const FILENAME = 'log';
 async function run() {
     try {
-        const jsonInput = core.getInput('json', { trimWhitespace: true, required: true }) || '{}';
+        const jsonInput = core.getMultilineInput('json', { trimWhitespace: true, required: true }) || '';
         await checkFile();
         console.log('jsonInput', jsonInput);
         const data = await (0, promises_1.readFile)(`${FILENAME}.json`, "utf8");
-        const jsonInputData = JSON.parse(jsonInput);
+        const jsonInputData = inputToJson(jsonInput);
         console.log('jsonInputData', jsonInputData);
         let fileData = JSON.parse(data);
         console.log('fileData', fileData);
@@ -24766,6 +24766,18 @@ async function checkFile() {
         await (0, promises_1.writeFile)(`${FILENAME}.json`, JSON.stringify({}, null, 4));
         return false;
     }
+}
+function inputToJson(input) {
+    const json = {};
+    input.forEach(element => {
+        if (element) {
+            const key = element.split(':').shift()?.trim();
+            const value = element.split(':').slice(1).join(":").trim();
+            if (key)
+                json[key] = value;
+        }
+    });
+    return json;
 }
 function fixJsonString(str) {
     const fixedStr = str.replace(/'/g, '"').replace(/(\w+):/g, '"$1":');
