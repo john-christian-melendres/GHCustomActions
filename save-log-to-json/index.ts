@@ -5,19 +5,24 @@ const FILENAME = 'log';
 
 async function run(): Promise<void> {
   try {
-    const jsonInput = core.getInput('json', {trimWhitespace: true, required: true} ) || 'HEAD';
+    const jsonInput = core.getInput('json', {trimWhitespace: true, required: true} ) || '{}';
 
     await checkFile();
       
     const data = await readFile(`${FILENAME}.json`, "utf8");
     const jsonInputData = fixJsonString(jsonInput);
+    console.log(jsonInputData)
     let fileData: IJsonSchema = fixJsonString(data);
+    console.log(fileData)
 
     fileData = { ...fileData, ...jsonInputData };
+    console.log(fileData)
 
     await writeFile(`${FILENAME}.json`,JSON.stringify(fileData, null, 4));
 
     const dataString = await readFile(`${FILENAME}.json`, "utf8");
+    console.log(fileData)
+    console.log({dataString})
 
     core.setOutput('json', fileData);
     core.setOutput('json-string', dataString);

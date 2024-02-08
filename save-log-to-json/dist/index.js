@@ -24736,14 +24736,19 @@ const promises_1 = __nccwpck_require__(3292);
 const FILENAME = 'log';
 async function run() {
     try {
-        const jsonInput = core.getInput('json', { trimWhitespace: true, required: true }) || 'HEAD';
+        const jsonInput = core.getInput('json', { trimWhitespace: true, required: true }) || '{}';
         await checkFile();
         const data = await (0, promises_1.readFile)(`${FILENAME}.json`, "utf8");
         const jsonInputData = fixJsonString(jsonInput);
+        console.log(jsonInputData);
         let fileData = fixJsonString(data);
+        console.log(fileData);
         fileData = { ...fileData, ...jsonInputData };
+        console.log(fileData);
         await (0, promises_1.writeFile)(`${FILENAME}.json`, JSON.stringify(fileData, null, 4));
         const dataString = await (0, promises_1.readFile)(`${FILENAME}.json`, "utf8");
+        console.log(fileData);
+        console.log({ dataString });
         core.setOutput('json', fileData);
         core.setOutput('json-string', dataString);
     }
