@@ -8,21 +8,20 @@ async function run(): Promise<void> {
     const jsonInput = core.getInput('json', {trimWhitespace: true, required: true} ) || '{}';
 
     await checkFile();
-      
+    console.log('jsonInput', jsonInput)  
     const data = await readFile(`${FILENAME}.json`, "utf8");
-    const jsonInputData = fixJsonString(jsonInput);
-    console.log(jsonInputData)
-    let fileData: IJsonSchema = fixJsonString(data);
-    console.log(fileData)
+    const jsonInputData = JSON.parse(jsonInput);
+    console.log('jsonInputData', jsonInputData)
+    let fileData: IJsonSchema = JSON.parse(data);
+    console.log('fileData',fileData)
 
     fileData = { ...fileData, ...jsonInputData };
-    console.log(fileData)
+    console.log('fileData',fileData)
 
     await writeFile(`${FILENAME}.json`,JSON.stringify(fileData, null, 4));
 
     const dataString = await readFile(`${FILENAME}.json`, "utf8");
-    console.log(fileData)
-    console.log({dataString})
+    console.log('dataString',dataString)
 
     core.setOutput('json', fileData);
     core.setOutput('json-string', dataString);
