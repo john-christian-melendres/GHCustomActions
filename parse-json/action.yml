@@ -11,8 +11,8 @@ inputs:
     default: ''
 
   outputs:
-  text:
-    description: 'plain text separate by new line'
+    text:
+      description: 'plain text separate by new line'
   
 runs:
   using: node20
