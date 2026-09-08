@@ -1,0 +1,15 @@
+name: 'Show the bugbug suite e2e summary'
+description: 'Show the suite e2e summary'
+
+inputs:
+  json:
+    description: 'bugbug summary'
+    required: true
+    default: ''
+  profile-name:
+    description: 'bugbug profile name'
+    default: ''
+
+runs:
+  using: node20
+  main: dist/index.js
